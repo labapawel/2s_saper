@@ -2,7 +2,19 @@ const XIlosc = 20; // wielkość pola
 const YIlosc = 20; // wielkość pola
 const min = 20; // liczba min
 const $ = (n) => document.querySelector(n);
-let matryca = [];
+const offsetMap = [[-1,-1], [-1,0], [-1,1], [0,-1], [0,1], [1,-1], [1,0], [1,1]];
+let matryca=[]
+
+function OblIleMin(x,y){
+    offsetMap.forEach(off=>{
+        let px=off[1]+x;
+        let py=off[0]+y;
+        if( px<XIlosc && px>=0 && py<YIlosc && py >= 0 ){
+            matryca[py][px].ileMin++;
+        }
+
+    })
+}
 
 function genMin()
 {
@@ -15,6 +27,7 @@ function genMin()
             let y = Math.floor(Math.random()*YIlosc);
             if(!matryca[y][x].mina){
                 matryca[y][x].mina = true;
+                OblIleMin(x,y);
                 iloscMin--;
             }
         }
@@ -53,28 +66,31 @@ function init() {
         //div.innerHTML = "0";
         div.addEventListener('contextmenu', (e)=>{
             e.preventDefault();
-            if(e.target.classList.contains('flaga'))
+            let pole = matryca[e.target.getAttribute('y')][e.target.getAttribute('x')];
+            pole.oznaczone = !pole.oznaczone;
+            if(!pole.oznaczone)
                 {
                     e.target.classList.remove('flaga');
-                    e.target.classList.add('hide');        
+                    e.target.classList.add('hide');   
+                         
                 }
-            else if(e.target.classList.contains('hide'))
-                {
+            else {
                     e.target.classList.add('flaga');
                     e.target.classList.remove('hide');
                 }
 
             return false;
         }, false);
-        
-        let poleMiny = {mina:false, ileMin:0, pole:div}
+        div.setAttribute('x', x);
+        div.setAttribute('y', y);
+        let poleMiny = {mina:false, ileMin:0, pole:div, oznaczone:false}
         matryca[y].push(poleMiny);
         k.append(div);
     }
   }
   genMin();
-  wyswielt();
+  //wyswielt()
 }
 
 
-init()
+init();

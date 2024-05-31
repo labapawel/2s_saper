@@ -17,11 +17,15 @@
     cursor: pointer;    
     width: 100%;
     text-align: center;
+    font-size: 70%;
 }
 .saper > .kontener > .poleminy.flaga::before {
  content: '🚩';
 }
 
+.saper > .kontener > .poleminy.mina::before {
+    content: '🧨';
+   }
 .saper > .kontener > .poleminy.mina1::before {
     content: '1';
    }
