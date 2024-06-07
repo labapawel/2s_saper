@@ -53,4 +53,5 @@
    
 .saper > .kontener > .poleminy.hide {
     font-size: 0;
+    background-color: gray;
 }
