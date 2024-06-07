@@ -51,6 +51,7 @@ function wyswielt(){
 }
 
 function odslonaMin(){
+    $('.kontener').classList.add('koniecGry');
     matryca.forEach(y=>{
         y.forEach(e=>{
             if(e.mina && !e.oznaczone){
@@ -63,8 +64,9 @@ function odslonaMin(){
 
 function odslona(x, y){
 
+
     let m = matryca[y][x];
-    console.log(m);
+  //  console.log(m);
     if(m.oznaczone){
         return;
     }
@@ -117,7 +119,8 @@ function init() {
         div.addEventListener('click', (e)=>{
           let x = parseInt(e.target.getAttribute('x')); 
           let y = parseInt(e.target.getAttribute('y'));
-          odslona(x, y);
+          if(!$('.kontener').classList.contains('koniecGry'))
+                   odslona(x, y);
         })
         div.addEventListener('contextmenu', (e)=>{
             e.preventDefault();
