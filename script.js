@@ -1,9 +1,12 @@
 const XIlosc = 20; // wielkość pola
 const YIlosc = 20; // wielkość pola
-const min = 40; // liczba min
+const min = 80; // liczba min
 const $ = (n) => document.querySelector(n);
 const offsetMap = [[-1,-1], [-1,0], [-1,1], [0,-1], [0,1], [1,-1], [1,0], [1,1]];
 let matryca=[]
+let generowanieMin = {genMin:false, x:-1, y:-1}; //
+
+
 
 function OblIleMin(x,y){
     offsetMap.forEach(off=>{
@@ -21,11 +24,24 @@ function genMin()
     if((YIlosc*XIlosc) < min) 
             throw new Error("liczba min jest zbyt wielka");
     let iloscMin = min;
+    // miejsca ignorowane
+    let ignorowane = [[generowanieMin.y,generowanieMin.x]];
+    offsetMap.forEach(e=>{
+       ignorowane.push([e[0]+generowanieMin.y, e[1]+generowanieMin.x]);         
+    })
+    // console.log(ignorowane)
+
+
     while(iloscMin>0)
         {
             let x = Math.floor(Math.random()*XIlosc);
             let y = Math.floor(Math.random()*YIlosc);
-            if(!matryca[y][x].mina){
+            // console.log(ignorowane.filter(e=>e[0]==y && e[1]==x))
+
+            if(
+                !matryca[y][x].mina && 
+                ignorowane.filter(e=>e[0]==y && e[1]==x).length == 0
+            ){
                 matryca[y][x].mina = true;
                 OblIleMin(x,y);
                 iloscMin--;
@@ -64,6 +80,12 @@ function odslonaMin(){
 
 function odslona(x, y){
 
+    if(!generowanieMin.genMin){
+        generowanieMin.genMin = true; // zablokowanie ponownego gen min
+        generowanieMin.x = x; // poz pierwszego kliku
+        generowanieMin.y = y;
+        genMin();
+    }
 
     let m = matryca[y][x];
   //  console.log(m);
@@ -147,7 +169,7 @@ function init() {
         k.append(div);
     }
   }
-  genMin();
+  //genMin();
   //wyswielt()
 }
 
