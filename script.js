@@ -1,6 +1,8 @@
-const XIlosc = 20; // wielkość pola
-const YIlosc = 20; // wielkość pola
-const min = 80; // liczba min
+const XIlosc = 10; // wielkość pola
+const YIlosc = 10; // wielkość pola
+const min = 10; // liczba min
+let ileZaznaczonoFlag = 0;
+let ileOdkrytoPol = (XIlosc*YIlosc)-min;
 const $ = (n) => document.querySelector(n);
 const offsetMap = [[-1,-1], [-1,0], [-1,1], [0,-1], [0,1], [1,-1], [1,0], [1,1]];
 let matryca=[]
@@ -100,6 +102,9 @@ function odslona(x, y){
     else 
     if(m.ileMin==0)
     {
+        if(!m.odslona)
+            ileOdkrytoPol--;
+
         m.odslona = true;
         m.pole.classList.remove('hide');
         
@@ -113,16 +118,31 @@ function odslona(x, y){
                     odslona(px, py);
                 else 
                 {
-                    m.pole.classList.add("mina"+m.ileMin);
-                    m.pole.classList.remove('hide');
+                    if(!m.odslona)
+                        {
+                            m.pole.classList.add("mina"+m.ileMin);
+                            ileOdkrytoPol--;
+                            m.odslona = true;
+                            m.pole.classList.remove('hide');
+                        }
                 }       
             }
         
         })
    } else {
-     m.pole.classList.add("mina"+m.ileMin);
-     m.pole.classList.remove('hide');
-   }
+    if(!m.odslona){
+         m.pole.classList.add("mina"+m.ileMin);
+         ileOdkrytoPol--;
+         m.pole.classList.remove('hide');
+         m.odslona = true;
+     }
+    }
+}
+
+const wynik = () =>{
+    $('.wynik').innerHTML = `
+        Ile pól: ${ileOdkrytoPol} ile oznaczono min ${ileZaznaczonoFlag}
+    `
 }
 
 function init() {
@@ -143,6 +163,7 @@ function init() {
           let y = parseInt(e.target.getAttribute('y'));
           if(!$('.kontener').classList.contains('koniecGry'))
                    odslona(x, y);
+          wynik();
         })
         div.addEventListener('contextmenu', (e)=>{
             e.preventDefault();
@@ -151,15 +172,18 @@ function init() {
             if(!pole.oznaczone)
                 {
                     e.target.classList.remove('flaga');
+                    ileZaznaczonoFlag--;
                     e.target.classList.add('hide');   
                          
                 }
             else {
                     e.target.classList.add('flaga');
+                    ileZaznaczonoFlag++;
                     e.target.classList.remove('hide');
                 }
 
-            return false;
+                wynik();
+            return false;        
         }, false);
         div.setAttribute('x', x);
         div.setAttribute('y', y);
@@ -169,6 +193,7 @@ function init() {
         k.append(div);
     }
   }
+  wynik();
   //genMin();
   //wyswielt()
 }
