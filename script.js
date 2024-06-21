@@ -96,6 +96,8 @@ function odslona(x, y){
     }
     if(m.mina)
         {
+            $('.wynik').innerHTML = `przegrałeś !!!!`;
+            $('.kontener').classList.add("koniecGry")
             odslonaMin();
             return false;
         }
@@ -140,9 +142,19 @@ function odslona(x, y){
 }
 
 const wynik = () =>{
-    $('.wynik').innerHTML = `
-        Ile pól: ${ileOdkrytoPol} ile oznaczono min ${ileZaznaczonoFlag}
-    `
+    if(ileOdkrytoPol==0 && ileZaznaczonoFlag==min)
+        {
+        $('.wynik').innerHTML = `wygrałeś !!!!`;
+        $('.kontener').classList.add("koniecGry")
+
+        }
+    else   
+    if(!$('.kontener').classList.contains("koniecGry"))
+            $('.wynik').innerHTML = `
+                Ile pól: ${ileOdkrytoPol} ile oznaczono min ${ileZaznaczonoFlag}
+            `
+
+
 }
 
 function init() {
